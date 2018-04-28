@@ -54,7 +54,6 @@ if($action == "Recup_Nom_Visiteur_Fiche_Valide"){
     
     $sql = "SELECT distinct nom,id FROM FicheFrais INNER JOIN Visiteur on id = Visiteur.id WHERE (id IN (SELECT idVisiteur FROM FicheFrais) AND (idEtat = 'VA' OR idEtat ='RB'))" ; 
     $resultat = connecterServeurBD()->query($sql);
-    
     if(!empty($resultat)){
       $res = $resultat->fetch_all(MYSQLI_ASSOC) ;
       foreach ($res as $ligne){
@@ -109,7 +108,7 @@ if(isset($_POST['action']))
     {
         $id = $_POST['id'] ; 
 
-        $sql = "SELECT mois FROM FicheFrais WHERE idVisiteur = '".$id."'";
+        $sql = "SELECT mois FROM FicheFrais WHERE idVisiteur = '".$id."' AND idEtat = 'CR'";
         if($result = $conn->query($sql))
         {
                      
@@ -141,7 +140,7 @@ if(isset($_POST['action']))
     {
         $id = $_POST['id'] ; 
 
-        $sql = "SELECT mois FROM FicheFrais WHERE idVisiteur = '".$id."' AND idEtat = 'VA'" ;
+        $sql = "SELECT mois FROM FicheFrais WHERE idVisiteur = '$id' AND idEtat = 'VA'" ;
         if($result = $conn->query($sql))
         {
                      
@@ -247,12 +246,12 @@ if(isset($_POST["action"]))
         $mois = $_POST["mois"] ;
         $total = $_POST["total"] ;    
         
-        $sql = "UPDATE FicheFrais SET idEtat = 'VA', montantValide = '$total' WHERE (idVisiteur = '$id' AND mois = '$mois')" ; 
-        $result =  $conn->query($sql) ; 
+        $sql1 = "UPDATE FicheFrais SET idEtat = 'VA' WHERE (idVisiteur = '$id' AND mois = '$mois')" ; 
+        $result =  $conn->query($sql1) ;
+        $sql2 = "UPDATE FicheFrais SET montantValide = '$total' WHERE (idVisiteur = '$id' AND mois = '$mois')" ; 
+        $result =  $conn->query($sql2) ;
     }
 }
-
-    
      
          
         
